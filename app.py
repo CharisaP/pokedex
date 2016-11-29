@@ -20,7 +20,14 @@ def login_required(f):
 @app.route('/')
 @login_required
 def home():
-    return render_template('index.html')
+    if request.method=='POST':
+
+        pname = request.form['pname']
+        dbHandler.addPokemon(pname)
+        flash("Pokemon added")
+        return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -33,6 +40,7 @@ def login():
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
+            flash('You have logged in.')
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
 
@@ -42,12 +50,24 @@ def addUser():
     if request.method=='POST':
         username = request.form['username']
         password = request.form['password']
-        dbHandler.addUser(username, password)
         users = dbHandler.retrieveUsers()
+
+        x = (request.form['username'], request.form['password'])
         print users
-        return render_template('addUser.html', users=users)
+        print x
+        if x in users:
+            print "error"
+            error = 'Username already exists. Please try again.'
+
+            return render_template('addUser.html', error=error)
+        else:
+            dbHandler.addUser(username, password)
+            session['logged_in'] = True
+            return redirect(url_for('home'))
+
     else:
-        return render_template('addUser.html')
+
+        return render_template('addUser.html',error=error)
 
 
 @app.route('/logout')

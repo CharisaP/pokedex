@@ -16,6 +16,12 @@ def retrieveUsers():
     con.close()
     return users
 #remove pokemon, add pokemon, search (type),
+def addPokemon():
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("INSERT INTO pokemon (pname) VALUES (?)", (pname))
+    con.commit()
+    con.close()
 
 def searchByType(typename):
     con = sql.connect("database.db")
