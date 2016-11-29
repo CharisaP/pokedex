@@ -1,1 +1,10 @@
 branstorming.txt
+
+
+-create app.py
+-no heroku!
+
+
+Structure:
+    login page
+    
