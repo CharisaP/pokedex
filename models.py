@@ -15,3 +15,12 @@ def retrieveUsers():
     users = cur.fetchall()
     con.close()
     return users
+#remove pokemon, add pokemon, search (type),
+
+def searchByType(typename):
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM pokemon WHERE type = typename")
+    pokemon = cur.fetchall()
+    con.close()
+    return pokemon

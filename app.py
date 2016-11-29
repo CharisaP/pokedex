@@ -27,11 +27,12 @@ def home():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        users = dbHandler.retrieveUsers()
+        x = (request.form['username'], request.form['password'])
+        if x not in users:
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
-            #flash('You were logged in.')
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
 
