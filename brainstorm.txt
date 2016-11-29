@@ -7,4 +7,12 @@ branstorming.txt
 
 Structure:
     login page
+
     
+
+    index.html
+        add pokemon
+        search
+        remove??
+
+    register.html

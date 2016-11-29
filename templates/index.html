@@ -13,6 +13,23 @@
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
+
+
+
     </div>
+
+
+
+    <div class="users" style="margin-left:20%">
+      <h2>Registered Users List</h2>
+      <table style="width:100%;">
+        {%for user in users%}
+          <tr>
+            <td>{{users[0]}}</td>
+          </tr>
+        {%endfor%}
+      </table>
+    </div>
+
   </body>
 </html>
