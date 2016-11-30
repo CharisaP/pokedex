@@ -8,7 +8,6 @@ branstorming.txt
 Structure:
     login page
 
-    
 
     index.html
         add pokemon
@@ -16,3 +15,5 @@ Structure:
         remove??
 
     register.html
+
+    need access to current user for saving pokemon to database

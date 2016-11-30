@@ -13,13 +13,17 @@
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
+
+
+      <form  method="get" id="form1">
+        Pokemon Name <input type="text" name="pname"><br>
+      </form>
+      <button type="submit" form="form1" value="Add">Submit</button>
     </div>
 
-    <form  method="get" id="form1">
-      Pokemon Name <input type="text" name="pname"><br>
-    </form>
 
-<button type="submit" form="form1" value="Add">Submit</button>
+
+
 
   </body>
 </html>
