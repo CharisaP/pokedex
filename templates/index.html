@@ -13,12 +13,18 @@
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
-
+       <h3> Add a Pokemon </h3>
+      <div class="container">
 
       <form  method="get" id="form1">
-        Pokemon Name <input type="text" name="pname"><br>
+        <p>Pokemon Name: <input type="text" name="pname"> </p>
+        <p>Pokemon Type: </p><input type="radio" name="ptype" value="water" checked> Water
+        <input type="radio" name="ptype" value="fire"> Fire
+        <input type="radio" name="ptype" value="other"> Other   
       </form>
       <button type="submit" form="form1" value="Add">Submit</button>
+
+  </div>
     </div>
 
 

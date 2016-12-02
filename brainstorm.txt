@@ -17,3 +17,5 @@ Structure:
     register.html
 
     need access to current user for saving pokemon to database
+    prevent empty fields
+    

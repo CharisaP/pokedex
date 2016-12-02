@@ -21,11 +21,11 @@ def login_required(f):
 @login_required
 def home():
     if request.method=='POST':
-
         pname = request.form['pname']
         dbHandler.addPokemon(pname)
         flash("Pokemon added")
-        return render_template('index.html')
+
+        return redirect(url_for('home'))
     else:
         return render_template('index.html')
 
@@ -33,6 +33,7 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    
     if request.method == 'POST':
         users = dbHandler.retrieveUsers()
         x = (request.form['username'], request.form['password'])
@@ -52,14 +53,14 @@ def addUser():
         password = request.form['password']
         users = dbHandler.retrieveUsers()
 
-        x = (request.form['username'], request.form['password'])
-        print users
+        x = request.form['username']
         print x
-        if x in users:
-            print "error"
-            error = 'Username already exists. Please try again.'
 
-            return render_template('addUser.html', error=error)
+        for y in users:
+            if x in y[0]:
+                error = 'Username already exists. Please try again.'
+                return render_template('addUser.html', error=error)
+
         else:
             dbHandler.addUser(username, password)
             session['logged_in'] = True

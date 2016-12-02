@@ -15,9 +15,12 @@ def retrieveUsers():
     users = cur.fetchall()
     con.close()
     return users
+
+def removeAllUsers():
+    pass
 #remove pokemon, add pokemon, search (type),
 
-def addPokemon():
+def addPokemon(pname):
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("INSERT INTO pokemon (pname) VALUES (?)", (pname))
@@ -31,3 +34,10 @@ def searchByType(typename):
     pokemon = cur.fetchall()
     con.close()
     return pokemon
+
+def eraseUsers():
+        con = sql.connect("database.db")
+        cur = con.cursor()
+        cur.execute("DELETE * FROM users")
+        con.commit()
+        con.close()
