@@ -14,28 +14,22 @@
   </style>
 
     <div class="container">
-      <h1>Welcome to the Pokedex!!</h1>
+      <h1>Remove Pokemon</h1>
       <br>
-      <p>Click <a href="/logout">here</a> to logout.</p>
+      <p>Click <a href="/home">here</a> to go back.</p>
+
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
 
-      <form action="" method="post" id="form1">
-        Pokemon Name: <input type="text" placeholder="Name" name="pname" value="{{ request.form.pname }}"><br><br>
-        Level (1-100): <input type="text" placeholder="Level" name="plevel" value="{{ request.form.plevel }}" min="0" max="100"><br><br>
-        Type: <input type="text" placeholder="Type"name="ptype" value="{{ request.form.ptype }}"><br><br>
+      <form action="" method="post" id="form2">
+        Remove Pokemon: <input type="text" placeholder="Name" name="pname" value="{{request.form.pname}}"><br><br>
       </form>
 
-      {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}
-      {% endif %}
+      <button type="submit" form="form2" value="Remove Pokemon">Remove Pokemon</button>
+      <br>
 
-      <button type="submit" form="form1" value="Add">Add Pokemon</button>
-
-      <br><br>
-      <p>Click <a href="/removePokemon">here</a> to remove a Pokemon in your party.</p>
-
+      <br>
       <p> Current Pokemon: </p>
       <p> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Pokemon] [Type] [Level] </b></p>
         <ul>
@@ -44,6 +38,10 @@
         {% endfor %}
       </ul>
       <br>
+
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
 
     </div>
   </body>

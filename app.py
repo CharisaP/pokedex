@@ -20,11 +20,12 @@ def login_required(f):
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
+    currentOwner = session['currentuser']
+
     if request.method=='POST':
         pname = request.form.get('pname')
         plevel = request.form.get('plevel')
         ptype = request.form.get('ptype')
-        currentOwner = session['currentuser']
         print(pname,plevel,ptype,currentOwner)
         #pname,ptype,pid,owner,plevel
         UP = dbHandler.userPokemon(currentOwner)
@@ -33,17 +34,59 @@ def home():
         x = False
         for i in UP:
             if pname in i:
-                flash("Pokemon is Already there!")
+                flash("Pokemon already exists. Please enter a different Pokemon name.")
                 x = True
         if not x:
             dbHandler.addPokemon(pname,ptype,currentOwner,plevel)
             flash("Pokemon added")
 
-        return redirect(url_for('home'))
+        output = dbHandler.userPokemon(currentOwner);
+        for i in range(len(output)):
+            output[i]=list(output[i])
+            output[i][0]=str(output[i][0])
+            output[i][1]=str(output[i][1])
+        output = ToStr(output)
+        return render_template('index.html', output=output)
     else:
-        return render_template('index.html')
+        output = dbHandler.userPokemon(currentOwner);
+        for i in range(len(output)):
+            output[i]=list(output[i])
+            output[i][0]=str(output[i][0])
+            output[i][1]=str(output[i][1])
+        output = ToStr(output)
+        return render_template('index.html', output=output)
 
 
+@app.route('/removePokemon', methods=['GET', 'POST'])
+@login_required
+def removePokemon():
+    currentOwner = session['currentuser']
+
+    output = dbHandler.userPokemon(currentOwner);
+    for i in range(len(output)):
+        output[i]=list(output[i])
+        output[i][0]=str(output[i][0])
+        output[i][1]=str(output[i][1])
+
+    output = ToStr(output)
+
+    if request.method=='POST':
+        pname = request.form.get('pname')
+        UP = dbHandler.userPokemon(currentOwner)
+        for i in UP:
+            print i
+        x = False
+        for i in UP:
+            if pname in i:
+                dbHandler.eraseUserPokemon(currentOwner,pname)
+                flash("Pokemon Removed")
+                x = True
+        if not x:
+            flash("Pokemon Does Not Exist")
+
+    return render_template('removepoke.html', output=output)
+
+@app.route('/login', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
@@ -96,6 +139,13 @@ def logout():
 @app.route('/battle')
 def battle():
     return render_template('battle.html')
+
+def ToStr(output):
+    newList = []
+    #newList.append('{0:<15} {1:<15} {2:<5}'.format('Pokemon','Type','Level'))
+    for i in output:
+        newList.append('{0:<15} {1:<15} {2:<5}'.format(i[0],i[1],i[2]))
+    return newList
 
 if __name__ == "__main__":
     

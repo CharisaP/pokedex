@@ -16,15 +16,17 @@ def retrieveUsers():
     con.close()
     return users
 
-def removeAllUsers():
-    pass
-#remove pokemon, add pokemon, search (type),
-
 def addPokemon(pname,ptype,owner,plevel):
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("INSERT INTO OwnedPokemon (name,type,owner,level) VALUES (?,?,?,?)", (pname,ptype,owner,plevel))
     con.commit()
+    con.close()
+
+def eraseUserPokemon(user,mon):
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute('DELETE FROM OwnedPokemon WHERE owner = ? and name = ?',(user,mon,))
     con.close()
 
 def searchByType(typename):
