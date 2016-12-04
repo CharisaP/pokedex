@@ -3,17 +3,25 @@
 drop table if exists users;
     create table users (
     username text primary key not null,
-    password text  null
+    password text null,
+    FOREIGN KEY(username) REFERENCES OwnedPokemon(owner)
 );
 
-drop table if exists pokemon;
-    create table pokemon (
+drop table if exists OwnedPokemon;
+    create table OwnedPokemon (
+    type text not null,	
+    name text not null,
+    level int not null,
+    owner text not null,
+    PRIMARY KEY(owner,name)
+ );
 
-    pname text not null,
-    pid integer primary key not null,
-    ptype text not null,
-    owner text not null
+drop table if exists Pokemon;
+    create table Pokemon (
+	type text not null,
+	name text not null,
+	PRIMARY KEY(name),
+	FOREIGN KEY(name)
+	REFERENCES OwnedPokemon(pname)
+);
 
-    );
-
-    

@@ -5,10 +5,16 @@
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 
   </head>
-  <body background="static/loginBackground.jpg">
+  <style>
+  body {
+    background-image: url("static/loginBackground.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  </style>
     <div class="container">
-      <h1>Please login</h1>
-      <p>Click <a href="/addUser">here</a> to create an account.</p>
+      <h1 style="color:white;">Please login</h1>
+      <p style="color:white;">Click <a href="/addUser">here</a> to create an account.</p>
       <br>
       <form action="" method="post">
         <input type="text" placeholder="Username" name="username" value="{{
