@@ -57,6 +57,19 @@ def eraseUserPokemon(user,mon):
         pass
     con.close()
 
+def stillWild():
+    #select all pokemon in OwnedPokemon that have level
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    try:
+        cur.execute('SELECT Pokemon.name FROM Pokemon LEFT JOIN OwnedPokemon ON OwnedPokemon.name = Pokemon.name WHERE OwnedPokemon.name IS NULL')
+        pokemon = cur.fetchall()
+        #con.commit()
+    except OperationalError:
+        pass
+    con.close()
+    return pokemon
+
 def searchByType(typename):
     con = sql.connect("database.db")
     cur = con.cursor()
@@ -100,3 +113,16 @@ def updateLevel(newLevel,name,owner):
     except OperationalError:
         pass
     con.close()
+
+def getType(mon):
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    typ = None
+    try:
+        cur.execute('SELECT type From Pokemon Where name = ?',(mon,))
+        typ = cur.fetchall()
+    except:
+        pass
+    return typ
+    
+

@@ -2,6 +2,8 @@ from flask import Flask, render_template, redirect, \
     url_for, request, session, flash, g
 from functools import wraps
 import models as dbHandler
+from Battle import *
+from random import randint
 
 app = Flask(__name__)
 
@@ -24,7 +26,7 @@ def home():
 
     if request.method=='POST':
         pname = request.form.get('pname')
-        plevel = request.form.get('plevel')
+        plevel = int(request.form.get('plevel'))
         ptype = request.form.get('ptype')
         #print(pname,plevel,ptype,currentOwner)
         LIST = dbHandler.getPokeList()
@@ -38,8 +40,13 @@ def home():
             output[i][1]=str(output[i][1])
         output = ToStr(output)
         if (ptype,pname) not in LIST:
-            flash("That is not a real Pokemon!")
+            flash("That is not a real Pokemon-Type combination!")
             return render_template('index.html', output=output)
+
+        if(plevel > 25 or plevel < 1):
+            flash("Pokemon level must be between 1 and 25!")
+            return render_template('index.html', output=output)
+
         # END - CHECK IF POKEMON IS REAL
 
         for i in UP:
@@ -51,6 +58,7 @@ def home():
                 x = True
         if not x:
             dbHandler.addPokemon(pname,ptype,currentOwner,plevel)
+            dbHandler.stillWild()
             flash("Pokemon added successfully!")
 
         output = dbHandler.userPokemon(currentOwner);
@@ -167,20 +175,78 @@ def logout():
 @login_required
 def battle():
     currentOwner = session['currentuser']
-    output = dbHandler.getPokeList();
+    currentPokes = dbHandler.userPokemon(currentOwner)
+    output = dbHandler.stillWild();
     newList = []
+    BattleTxt = []
+    newCurrentPokes = []
+    notOwned = 0
+    for i in range(len(currentPokes)):
+        currentPokes[i]=list(currentPokes[i])
+        currentPokes[i][0]=str(currentPokes[i][0])
+    for i in currentPokes:
+        newCurrentPokes.append(' | ' + str(i[0]))
+
     for i in range(len(output)):
         output[i]=list(output[i])
-        output[i][0]=str(output[i][1])
+        output[i][0]=str(output[i][0])
     for i in output:
         newList.append(' | ' + str(i[0]))
 
     if request.method=='POST':
-        pname = request.form.get('pname')
-        print(pname)
+        battlewith = request.form.get('battlewith')
+        Mons = dbHandler.userPokemon(currentOwner)
+        owned = False
+        Mon = None
+        for i in Mons:
+            if battlewith in i:
+                owned = True
+                Mon = i
+        if not owned:
+            #flash("You don't own that Pokemon!")
+            return render_template('battle.html',output=newList,pokes=newCurrentPokes,notOwned=1)
+        else:
+            pname,ptype,plevel = [str(e) for e in Mon]
+            plevel = int(plevel)
+            OwnedMon = Pokemon(pname,ptype,plevel)
+        battleagainst = request.form.get('battleagainst')
+        WildType = dbHandler.getType(battleagainst)
+        Type = str(WildType[0][0])
+        RandLevel = randint(1,plevel+10)
+        WildMon = Pokemon(battleagainst,Type,RandLevel)
+        BattleTxt,winner = PokemonBattle(OwnedMon,WildMon)
+        print winner 
+        if winner == pname:
+            #flash("You Won! {} has leveled up!".format(pname))
+            BattleTxt.append("{} has leveled up!".format(pname))
+            BattleTxt.append("{} has been added to your team!".format(battleagainst))
+            dbHandler.updateLevel(plevel+1,pname,currentOwner)
+            dbHandler.addPokemon(battleagainst,Type,currentOwner,RandLevel)
+            output = dbHandler.stillWild();
+            newCurrentPokes.append(' | ' + battleagainst)
+        else:
+            dbHandler.updateLevel(plevel-1,pname,currentOwner)
+            BattleTxt.append("{} has lost a level.".format(pname))
+        for i in BattleTxt:
+            print i
+        #print(battlewith,battleagainst,)
         #plevel = rand()
 
-    return render_template('battle.html',output=newList)
+    return render_template('battle.html',output=newList,output2=BattleTxt,pokes=newCurrentPokes)
+
+@app.route('/tracker', methods=['GET', 'POST'])
+@login_required
+def pokemonTracker():
+    output = dbHandler.stillWild();
+    newList = []
+    for i in range(len(output)):
+        output[i]=list(output[i])
+        output[i][0]=str(output[i][0])
+
+    for i in output:
+        newList.append(str(i[0]))
+
+    return render_template('tracker.html',output=newList)
 
 def ToStr(output):
     newList = []

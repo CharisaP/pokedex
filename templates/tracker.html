@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pokedex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <style>
+  body {
+    background-image: url("static/trackerImage.gif");
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: ;
+  }
+  </style>
+
+    <div class="container">
+      <h1 align="center">Pokemon Tracker</h1>
+      <br>
+      <p align="center">Click <a href="/home">here</a> to go back.</p>
+
+      <p align="center"><strong>Pokemon Still in Wild:</strong></p>
+      {% for message in get_flashed_messages() %}
+        {{ message }}
+      {% endfor %}
+    
+      <p align="center">
+        {% for i in output %} 
+          	{{ i }}<br>
+        {% endfor %}
+     </p>
+      <!--</ul>-->
+      <br>
+
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+
+      <br><br>
+
+    </div>
+  </body>
+</html>

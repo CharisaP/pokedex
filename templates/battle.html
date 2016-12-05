@@ -7,7 +7,7 @@
   </head>
   <style>
   body {
-    background-image: url("static/BattleTest.png");
+    background-image: url("static/battleBackground2.png");
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -18,20 +18,38 @@
       <br>
       <p align="center">Click <a href="/home">here</a> to go back.</p>
 
-      <p align="center">------------</p>
+<p align="center">
+
+      {% if notOwned == 1 %}
+      	{{ message }} <b>You don't own that Pokemon!</b>
+      {% endif %}
+
+      <p>
+
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
 
+    <p align="center" style="color:black;">
+    	<b>Current Team:</b>
+    </p>
+
+    <p align="center" style="color:black;">
+        {% for i in pokes %} 
+          	{{ i }}
+        {% endfor %}
+     </p>
+
       <form align="center"action="" method="post" id="battle">
-        Enter Pokemon to Battle:<br> <input type="text" placeholder="Name" name="pname" value="{{request.form.pname}}"><br><br>
+        Enter Pokemon to Battle With:<br> <input type="text" placeholder="Name" name="battlewith" value="{{request.form.battlewith}}"><br><br>
+        Enter Pokemon to Battle Against:<br> <input type="text" placeholder="Name" name="battleagainst" value="{{request.form.battleagainst}}"><br><br>
     
       <p> <b>Eligible Pokemon: </b></p>
       <!--<ul style="list-style: none;">-->
-      <p style="">
+      <p style="color:black;">
       {% set count = 0 %}
         {% for i in output %} 
-          	{{ i }}
+          	<strong>{{ i }}</strong>
           {% set count = count+1 %}
           {% if count > 5 %}
           	<br>
@@ -40,16 +58,23 @@
         {% endfor %}
      </p>
       <!--</ul>-->
-      <br>
 
-       	<button type="submit" form="battle" value="Battle">Battle!</button>
+       	<button type="submit" form="battle" value="Battle">Start Battle!</button>
       </form>
 
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
 
-      <br><br>
+      <br>
+
+    <p align="center" style="color:black;">
+        {% for i in output2 %} 
+          	{{ i }} <br>
+        {% endfor %}
+     </p>
+
+     <br><br>
 
     </div>
   </body>
