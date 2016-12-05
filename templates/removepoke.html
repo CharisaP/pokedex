@@ -31,13 +31,12 @@
 
       <br>
       <p> Current Pokemon: </p>
-      <p> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Pokemon] [Type] [Level] </b></p>
-        <ul>
+      <p> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Pokemon] | [Type] | [Level] </b></p>
+        <ul style="list-style: none;">
         {% for i in output %} 
           <li>{{ i }}</li>
         {% endfor %}
       </ul>
-      <br>
 
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}

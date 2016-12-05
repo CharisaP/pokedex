@@ -7,11 +7,18 @@ def addUser(username,password):
     con.commit()
     con.close()
 
-
 def retrieveUsers():
     con = sql.connect("database.db")
     cur = con.cursor()
     cur.execute("SELECT username, password FROM users")
+    users = cur.fetchall()
+    con.close()
+    return users
+
+def retrieveEligibleUsers():
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("SELECT username FROM users")
     users = cur.fetchall()
     con.close()
     return users
@@ -23,10 +30,19 @@ def addPokemon(pname,ptype,owner,plevel):
     con.commit()
     con.close()
 
+def getPokeList():
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM Pokemon")
+    pokemon = cur.fetchall()
+    con.close()
+    return pokemon
+
 def eraseUserPokemon(user,mon):
     con = sql.connect("database.db")
     cur = con.cursor()
-    cur.execute('DELETE FROM OwnedPokemon WHERE owner = ? and name = ?',(user,mon,))
+    cur.execute("DELETE FROM OwnedPokemon WHERE owner = ? AND name = ?",(user,mon,))
+    con.commit()
     con.close()
 
 def searchByType(typename):
@@ -38,11 +54,11 @@ def searchByType(typename):
     return pokemon
 
 def eraseUsers():
-        con = sql.connect("database.db")
-        cur = con.cursor()
-        cur.execute("DELETE * FROM users")
-        con.commit()
-        con.close()
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("DELETE * FROM users")
+    con.commit()
+    con.close()
 
 def userPokemon(user):
     con = sql.connect("database.db")

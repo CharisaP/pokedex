@@ -26,9 +26,22 @@ def home():
         pname = request.form.get('pname')
         plevel = request.form.get('plevel')
         ptype = request.form.get('ptype')
-        print(pname,plevel,ptype,currentOwner)
-        #pname,ptype,pid,owner,plevel
+        #print(pname,plevel,ptype,currentOwner)
+        LIST = dbHandler.getPokeList()
         UP = dbHandler.userPokemon(currentOwner)
+
+        # CHECK IF POKEMON IS REAL
+        output = dbHandler.userPokemon(currentOwner);
+        for i in range(len(output)):
+            output[i]=list(output[i])
+            output[i][0]=str(output[i][0])
+            output[i][1]=str(output[i][1])
+        output = ToStr(output)
+        if (ptype,pname) not in LIST:
+            flash("That is not a real Pokemon!")
+            return render_template('index.html', output=output)
+        # END - CHECK IF POKEMON IS REAL
+
         for i in UP:
             print i
         x = False
@@ -38,7 +51,7 @@ def home():
                 x = True
         if not x:
             dbHandler.addPokemon(pname,ptype,currentOwner,plevel)
-            flash("Pokemon added")
+            flash("Pokemon added successfully!")
 
         output = dbHandler.userPokemon(currentOwner);
         for i in range(len(output)):
@@ -72,6 +85,9 @@ def removePokemon():
 
     if request.method=='POST':
         pname = request.form.get('pname')
+
+        print(currentOwner,pname)
+
         UP = dbHandler.userPokemon(currentOwner)
         for i in UP:
             print i
@@ -84,6 +100,13 @@ def removePokemon():
         if not x:
             flash("Pokemon Does Not Exist")
 
+    output = dbHandler.userPokemon(currentOwner);
+    for i in range(len(output)):
+        output[i]=list(output[i])
+        output[i][0]=str(output[i][0])
+        output[i][1]=str(output[i][1])
+
+    output = ToStr(output)
     return render_template('removepoke.html', output=output)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -109,6 +132,9 @@ def addUser():
     if request.method=='POST':
         username = request.form['username']
         password = request.form['password']
+
+        thisuser = request.form['username']
+
         users = dbHandler.retrieveUsers()
 
         x = (request.form['username'], request.form['password'])
@@ -122,6 +148,7 @@ def addUser():
         else:
             dbHandler.addUser(username, password)
             session['logged_in'] = True
+            session['currentuser'] = thisuser
             g.user = username
             return redirect(url_for('home'))
     else:
@@ -136,15 +163,29 @@ def logout():
     flash('You were logged out.')
     return redirect(url_for('login'))
 
-@app.route('/battle')
+@app.route('/battle', methods=['GET', 'POST'])
+@login_required
 def battle():
-    return render_template('battle.html')
+    currentOwner = session['currentuser']
+    output = dbHandler.getPokeList();
+    newList = []
+    for i in range(len(output)):
+        output[i]=list(output[i])
+        output[i][0]=str(output[i][1])
+    for i in output:
+        newList.append(' | ' + str(i[0]))
+
+    if request.method=='POST':
+        pname = request.form.get('pname')
+        print(pname)
+        #plevel = rand()
+
+    return render_template('battle.html',output=newList)
 
 def ToStr(output):
     newList = []
-    #newList.append('{0:<15} {1:<15} {2:<5}'.format('Pokemon','Type','Level'))
     for i in output:
-        newList.append('{0:<15} {1:<15} {2:<5}'.format(i[0],i[1],i[2]))
+        newList.append('{0:<15} | {1:<15} | {2:<5}'.format(i[0],i[1],i[2]))
     return newList
 
 if __name__ == "__main__":

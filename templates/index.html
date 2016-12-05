@@ -17,6 +17,8 @@
       <h1>Welcome to the Pokedex!!</h1>
       <br>
       <p>Click <a href="/logout">here</a> to logout.</p>
+      <p>To initiate a Pokemon battle, click <a href="/battle">here</a></p>
+
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
@@ -37,9 +39,9 @@
       <p>Click <a href="/removePokemon">here</a> to remove a Pokemon in your party.</p>
 
       <p> Current Pokemon: </p>
-      <p> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Pokemon] [Type] [Level] </b></p>
-        <ul>
-        {% for i in output %} 
+      <p> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Pokemon] | [Type] | [Level] </b></p>
+        <ul style="list-style: none;">
+        {% for i in output %}
           <li>{{ i }}</li>
         {% endfor %}
       </ul>
