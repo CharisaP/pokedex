@@ -223,6 +223,13 @@ def battle():
             dbHandler.updateLevel(plevel+1,pname,currentOwner)
             dbHandler.addPokemon(battleagainst,Type,currentOwner,RandLevel)
             output = dbHandler.stillWild();
+            newList = []
+            for i in range(len(output)):
+                output[i]=list(output[i])
+                output[i][0]=str(output[i][0])
+            for i in output:
+                newList.append(' | ' + str(i[0]))
+
             newCurrentPokes.append(' | ' + battleagainst)
         else:
             dbHandler.updateLevel(plevel-1,pname,currentOwner)
@@ -237,6 +244,7 @@ def battle():
 @app.route('/tracker', methods=['GET', 'POST'])
 @login_required
 def pokemonTracker():
+    currentOwner = session['currentuser']
     output = dbHandler.stillWild();
     newList = []
     for i in range(len(output)):

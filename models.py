@@ -124,5 +124,5 @@ def getType(mon):
     except:
         pass
     return typ
-    
+
 

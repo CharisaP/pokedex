@@ -9,7 +9,7 @@
   body {
     background-image: url("static/trackerImage.gif");
     background-repeat: no-repeat;
-    background-position: left;
+    background-position: top left;
     background-size: ;
   }
   </style>
@@ -19,7 +19,8 @@
       <br>
       <p align="center">Click <a href="/home">here</a> to go back.</p>
 
-      <p align="center"><strong>Pokemon Still in Wild:</strong></p>
+      <p align="center"><strong>Pokemon still in wild:</strong></p>
+      <p align="center"><i>These pokemon have not yet been caught by a single user!<i></p>
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}

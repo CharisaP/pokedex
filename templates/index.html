@@ -18,12 +18,13 @@
       <br>
       <p>Click <a href="/logout">here</a> to logout.</p>
       <p>To initiate a Pokemon battle, click <a href="/battle">here</a></p>
-      <p>To combine two teams, click <a href="/combineTeam">here</a></p>
+      <!--<p>To combine two teams, click <a href="/combineTeam">here</a></p>-->
 
       {% for message in get_flashed_messages() %}
         {{ message }}
       {% endfor %}
 
+      <h2>Add a Pokemon to your party:</h2>
       <form action="" method="post" id="form1">
         Pokemon Name: <input type="text" placeholder="Name" name="pname" value="{{ request.form.pname }}"><br><br>
         Level (1-25): <input type="text" placeholder="Level" name="plevel" value="{{ request.form.plevel }}" min="0" max="100"><br><br>
@@ -35,13 +36,14 @@
       {% endif %}
 
       <button type="submit" form="form1" value="Add">Add Pokemon</button>
+
       <br><br>
       <a href="/tracker" class="btn btn-default">Go to Pokemon Tracker!</a>
 
       <br><br>
       <p>Click <a href="/removePokemon">here</a> to remove a Pokemon in your party.</p>
 
-      <p> Current Pokemon: </p>
+      <p><strong> Current Pokemon in Party: </strong></p>
       <p> <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Pokemon] | [Type] | [Level] </b></p>
         <ul style="list-style: none;">
         {% for i in output %}
