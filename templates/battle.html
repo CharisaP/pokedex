@@ -1,10 +1,81 @@
+<!DOCTYPE html>
 <html>
-	<body background = "static/loginBackground2.jpg">
-	  <div class = "container">
-	     <h2>Pick a Pokemon to battle with</h2>
-		
- >
-	</div>
-		
-	</body>
+  <head>
+    <title>Pokedex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <style>
+  body {
+    background-image: url("static/battleBackground2.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  </style>
 
+    <div class="container">
+      <h1 align="center">Versus</h1>
+      <br>
+      <p align="center">Click <a href="/home">here</a> to go back.</p>
+
+<p align="center">
+
+      {% if notOwned == 1 %}
+      	{{ message }} <b>You don't own that Pokemon!</b>
+      {% endif %}
+
+      <p>
+
+      {% for message in get_flashed_messages() %}
+        {{ message }}
+      {% endfor %}
+
+    <p align="center" style="color:black;">
+    	<b>Current Team:</b>
+    </p>
+
+    <p align="center" style="color:black;">
+        {% for i in pokes %} 
+          	{{ i }}
+        {% endfor %}
+     </p>
+
+      <form align="center"action="" method="post" id="battle">
+        Enter Pokemon to Battle With:<br> <input type="text" placeholder="Name" name="battlewith" value="{{request.form.battlewith}}"><br><br>
+        Enter Pokemon to Battle Against:<br> <input type="text" placeholder="Name" name="battleagainst" value="{{request.form.battleagainst}}"><br><br>
+    
+      <p> <b>Eligible Pokemon: </b></p>
+      <!--<ul style="list-style: none;">-->
+      <p style="color:black;">
+      {% set count = 0 %}
+        {% for i in output %} 
+          	<strong>{{ i }}</strong>
+          {% set count = count+1 %}
+          {% if count > 5 %}
+          	<br>
+          	{% set count = 0 %}
+          {% endif %}
+        {% endfor %}
+     </p>
+      <!--</ul>-->
+
+       	<button type="submit" form="battle" value="Battle">Start Battle!</button>
+      </form>
+
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+
+      <br>
+
+    <p align="center" style="color:black;">
+        {% for i in output2 %} 
+          	{{ i }} <br>
+        {% endfor %}
+     </p>
+
+     <br><br>
+
+    </div>
+  </body>
+</html>

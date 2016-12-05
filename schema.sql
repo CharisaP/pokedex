@@ -25,3 +25,5 @@ drop table if exists Pokemon;
 	REFERENCES OwnedPokemon(pname)
 );
 
+#pokemon still be in the wild
+#only 5 at a time
